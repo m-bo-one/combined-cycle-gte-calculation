@@ -116,9 +116,9 @@ class GTECalc(object):
             "Electric power (MW)", self.NelGTE))
 
     def save_results(self, file_name='gte_result.txt', mode='w'):
-        new_line_f = '{0}{1}'.format('\n', '-' * 125)
+        new_line_f = '{0}{1}'.format('-' * 125, '\n')
         with open(file_name, mode) as gte_result:
-            gte_result.write('{0:50}{1}'.format('', 'GTE'))
+            gte_result.write('{0:50}{1}\n'.format('', 'GTE'))
             gte_result.write(new_line_f)
             self._save_points_calc(gte_result)
             gte_result.write(new_line_f)
