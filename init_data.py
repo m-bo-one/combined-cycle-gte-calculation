@@ -13,21 +13,13 @@ gte_INIT = dict(
 
 # STEAM
 pte_INIT = dict(
-    NtPTE=8,
-    p6=1,
-    T6=400 + KELVIN_CONST,
-    h6=3264.39,
+    # NtPTE=8,
+    m=0.5,
+    T1=15 + KELVIN_CONST,
+    p6=15,
+    T6=100 + KELVIN_CONST,
+    # h6=3264.39,
 )
-pte_INIT.update(dict(
-    T7=pte_INIT['T6'] - Tcr,
-    p7=2,
-    h7=2270.91
-))
-pte_INIT.update(dict(
-    T8=pte_INIT['T7'],
-    p8=pte_INIT['p7'],
-    h8=134.11
-))
 
 # COMBINED
 combined_INIT = {}

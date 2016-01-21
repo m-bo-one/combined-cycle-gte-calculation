@@ -3,44 +3,71 @@ from constants import *
 from init_data import pte_INIT
 
 # third party
-from thermopy.iapws import Water
+from pyXSteam.XSteam import XSteam
+steamTable = XSteam(XSteam.UNIT_SYSTEM_MKS)
 
 
 class PTECalc(object):
 
-    w = Water()
-
     def __init__(self, **kwargs):
-        self.NtPTE = kwargs['NtPTE']
-        self.NelPTE = self.NtPTE * 0.8
+        self.m_flow = kwargs['m']
+        self.T1 = kwargs['T1']
         self.T6 = kwargs['T6']
         self.p6 = kwargs['p6']
-        # self.h6 = kwargs['h6']
-        self.T7 = kwargs['T7']
-        self.p7 = self.w.psat(self.T7) / float(10**6)
-        self.h7 = kwargs['h7']
-        self.T8 = kwargs['T8']
-        self.p8 = kwargs['p8']
-        self.h8 = kwargs['h8']
-        self.T9 = self.T8
-        self.p9 = self.p8
-        self.h9 = self.h8
+        self._set_params_at_points()
 
-    def calc_params_at_point(self, number):
-        if number == 6:
-            self.h6 = w.h(self.p6 * 10**6, self.T6)
-        elif number == 7:
-            self.p7 = self.w.psat(self.T7) / float(10**6)
+    def _set_params_at_points(self):
+        # -------------------------------------------------------------------
+        # POINT ==> 6
+        # Entalpy as a function of pressure and temperature.
+        self.h6 = steamTable.h_pt(self.p6, self.T6 - KELVIN_CONST)
+        # Specific entropy as a function of pressure and temperature
+        # (Returns saturated vapour entalpy if mixture.)
+        self.s6 = steamTable.s_pt(self.p6, self.T6 - KELVIN_CONST)
+        # -------------------------------------------------------------------
+        # POINT ==> 7
+        self.T7 = self.T1 + Tcr
+        # Saturation pressure
+        self.p7 = steamTable.psat_t(self.T7 - KELVIN_CONST)
+        self.s7 = self.s6
+        # Vapour fraction as a function of pressure and entropy
+        self.x7 = steamTable.x_ps(self.p7, self.s7)
+        # Entalpy as a function of temperature and vapour fraction
+        self.h7 = steamTable.h_tx(self.T7 - KELVIN_CONST, self.x7)
+        # -------------------------------------------------------------------
+        # POINT ==> 8
+        self.T8 = self.T7
+        # Saturated liquid enthalpy
+        self.h8 = steamTable.hL_t(self.T8 - KELVIN_CONST)
+        self.s8 = steamTable.sL_t(self.T8 - KELVIN_CONST)
+        # -------------------------------------------------------------------
+        # POINT ==> 9
+        self.p9 = self.p6
+        self.s9 = self.s8
+        self.h9 = steamTable.h_ps(self.p9, self.s9)
+        # -------------------------------------------------------------------
+        self._show_errors()
 
+    def _show_errors(self):
+        errors = []
+        for key, value in self.__dict__.iteritems():
+            if str(value) == 'nan':
+                errors.append('Param {0} has {1} value'.format(key, value))
+        if errors:
+            print errors
+
+    def calc_power_of_stem_turbine_and_gen(self):
+        self.NtPTE = (self.m_flow * self.lt) / float(10**3)
+        self.NelPTE = self.NtPTE * 0.8
 
     def calc_work_of_adiabatic_steam_expansion(self):
         self.lt = self.h6 - self.h7
 
     def calc_work_of_adiabatic_compression_of_water_in_pump(self):
-        self.ln = vWater * (self.p6 - self.p7)
+        self.ln = self.h9 - self.h8
 
     def calc_heat_in_boiler(self):
-        self.qb = self.h6 - self.h8
+        self.qb = self.h6 - self.h9
 
     def calc_thermal_efficiency(self):
         self.ETAtPTE = (self.lt - self.ln) / float(self.qb)
@@ -70,6 +97,7 @@ class PTECalc(object):
         self.calc_work_of_adiabatic_steam_expansion()
         self.calc_work_of_adiabatic_compression_of_water_in_pump()
         self.calc_heat_in_boiler()
+        self.calc_power_of_stem_turbine_and_gen()
         self.calc_thermal_efficiency()
         self.calc_electrical_efficiency()
         self.calc_specific_steam_consumption()
@@ -86,6 +114,8 @@ class PTECalc(object):
         pte_result.write(format_work_params.format(
             "Pump work (kJ/kgws)", self.ln))
         pte_result.write(format_work_params.format(
+            "Boiler heat (kJ/kgws)", self.qb))
+        pte_result.write(format_work_params.format(
             "Thermal efficiency (percents)", (self.ETAtPTE * 100)))
         pte_result.write(format_work_params.format(
             "Electrical efficiency (percents)", (self.ETAelPTE * 100)))
@@ -101,9 +131,9 @@ class PTECalc(object):
             "Fuel conditional consumption (kg/h)", self.Bc))
 
     def save_results(self, file_name='pte_result.txt', mode='w'):
-        new_line_f = '{0}{1}'.format('\n', '-' * 125)
+        new_line_f = '{0}{1}'.format('-' * 79, '\n')
         with open(file_name, mode) as pte_result:
-            pte_result.write('{0:50}{1}'.format('', 'PTE'))
+            pte_result.write('{0:30}{1} \n'.format('', 'Steam power plant'))
             pte_result.write(new_line_f)
             self._save_work_params(pte_result)
 
