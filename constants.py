@@ -30,7 +30,10 @@ format_work_params = "{0}: {1} \n"
 new_line_f = '{0}{1}'.format('-' * 125, '\n')
 formated_point_string = '{0:35} |{1:20} |{2:20} |{3:20} |{4:20} |\n'
 
-# CONFIG FOR PLOTING
+"""CONFIG FOR PLOTING
+X - axis, which changes due to Y
+Y - axis, which must be set for recalculating
+"""
 PLOT_CONFIG = {
     "x": {
         "label": None,  # label for x point, @string
@@ -42,19 +45,24 @@ PLOT_CONFIG = {
         }
     },
     "y": {
-        "label": None # label for y point, @string
+        "label": None, # label for y point, @string
+        "data": {
+            "names": None, # names of param for changing (only 3!!!), @array
+        }
     },
     "file_name": None,
     "GTE": {
         "grid": "ro-",
-        "name": "Gas turbine engine" # default value
+        "name": "GTE" # default value
     },
     "SPE": {
         "grid": "bo-",
-        "name": "Steam power engine" # default value
+        "name": "SPE" # default value
     },
     "CC": {
         "grid": "go-",
-        "name": "Combined engine" # default value
+        "name": "CC" # default value
     },
 }
+MEDIA_ROOT = 'pictures/'
+RESULTS_ROOT = 'results/'

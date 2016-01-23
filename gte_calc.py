@@ -179,5 +179,5 @@ class GTECalc(object):
 
 if __name__ == '__main__':
     gte_calc = GTECalc(**INIT_DATA)
-    with open('gte_result.txt', 'w') as writer:
+    with open(RESULTS_ROOT + 'gte_result.txt', 'w') as writer:
         gte_calc.save_results(writer)

@@ -6,7 +6,6 @@ from init_data import INIT_DATA, steamTable
 class SPECalc(object):
 
     def __init__(self, **kwargs):
-        self.m_flow = kwargs['m']
         self.T1 = kwargs['T1']
         self.T6 = kwargs['T6']
         self.p6 = kwargs['p6']
@@ -104,5 +103,5 @@ class SPECalc(object):
 
 if __name__ == '__main__':
     spe_calc = SPECalc(**INIT_DATA)
-    with open('spe_result.txt', 'w') as writer:
+    with open(RESULTS_ROOT + 'spe_result.txt', 'w') as writer:
         spe_calc.save_results(writer)
