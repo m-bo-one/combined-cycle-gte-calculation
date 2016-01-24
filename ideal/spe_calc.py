@@ -6,11 +6,7 @@ from init_data import INIT_DATA, steamTable
 class SPECalc(object):
 
     def __init__(self, **kwargs):
-        self.T1 = kwargs['T1']
-        self.T6 = kwargs['T6']
-        self.p6 = kwargs['p6']
-        self.T5 = kwargs['T5']
-        self.Tcr = kwargs['Tcr']
+        self.__dict__.update(kwargs)
         self._set_params_at_points()
 
     def _set_params_at_points(self):

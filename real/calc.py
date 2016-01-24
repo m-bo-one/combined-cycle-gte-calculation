@@ -8,15 +8,9 @@ wspru_api = WspRuAPI()
 class RealCalc(object):
 
     def __init__(self, **kwargs):
-        self.p1gte = self.piair = kwargs['piair']
-        self.PIk = kwargs['PIk']
-        self.T1gte = self.Tiair = kwargs['Tiair']
-        self.T3gte= kwargs['T3']
-        self.phiiair = kwargs['phiiair']
-        self.gsg = kwargs['gsg']
-        self.gs0 = kwargs['gs0']
-        self.sigmapb = kwargs['sigmapb']
-        self.sigmapp = kwargs['sigmapp']
+        self.__dict__.update(kwargs)
+        self.p1gte = self.piair
+        self.T1gte = self.Tiair
 
     @property
     def p2gte(self):
@@ -38,13 +32,15 @@ class RealCalc(object):
     def xiair(self):
         """The molar water content (unitless).
         """
-        return self.phiiair * self.pbiair / float(self.piair - self.phiiair * self.pbiair)
+        return self.phiiair * self.pbiair \
+            / float(self.piair - self.phiiair * self.pbiair)
 
     @property
     def diair(self):
         """The mass water content (kg of steam/kg of dry air).
         """
-        return self.xiair * wspru_api.wspg('MMGS', 'H2O') / float(wspru_api.wspg('MMGS', 'AirMix'))
+        return self.xiair * wspru_api.wspg('MMGS', 'H2O') \
+            / float(wspru_api.wspg('MMGS', 'AirMix'))
 
     @property
     def gsiair(self):
@@ -54,13 +50,13 @@ class RealCalc(object):
 
     @property
     def h1gte(self):
-        """Enthalpy of moisture air at atmospheric conditions (kJ/kga).
+        """Enthalpy of moisture air at atmospheric conditions (J/kga).
         """
         return wspru_api.wspg('HGST', self.gsiair, self.Tiair)
 
     @property
     def h2gte(self):
-        """Enthalpy of air after compressor at isoenthropic pressure (kJ/kga).
+        """Enthalpy of air after compressor at isoenthropic pressure (J/kga).
         """
         return wspru_api.wspg('HGST', self.gsiair, self.T2gte)
 
@@ -78,13 +74,13 @@ class RealCalc(object):
 
     @property
     def h3gte(self):
-        """Enthalpy of combusted products at the temperature before GT (kJ/kgg).
+        """Enthalpy of combusted products at the temperature before GT (J/kgg).
         """
         return wspru_api.wspg('HGST', self.gsg, self.T3gte)
 
     @property
     def h4gte(self):
-        """Enthalpy of working body after GT at isoentropic expansion (kJ/kgg).
+        """Enthalpy of working body after GT at isoentropic expansion (J/kgg).
         """
         return wspru_api.wspg('HGST', self.gsg, self.T4gte)
 
@@ -112,6 +108,67 @@ class RealCalc(object):
         """
         return wspru_api.wspg('TGSPS', self.gsiair, self.p4gte, self.s3gte)
 
+    @property
+    def lgtgte(self):
+        """Heat drop in GT at isoenthropic expansion (J/kgg).
+        """
+        return self.h3gte - self.h4gte
+
+    @property
+    def lgtgte_r(self):
+        """Heat drop in GT at real expansion (J/kgg).
+        """
+        return self.lgtgte * self.ETAoi_gt
+
+    @property
+    def NgtGTE(self):
+        """Power of GT (W).
+        """
+        return self.lgtgte_r * self.Gr * self.ETAm_gte
+
+    @property
+    def lcgte(self):
+        """Heat drop in C at isoenthropic expansion (J/kgg).
+        """
+        return self.h2gte - self.h1gte
+
+    @property
+    def lcgte_r(self):
+        """Heat drop in C at real expansion (J/kgg).
+        """
+        return self.lcgte / float(self.ETAoi_c)
+
+    @property
+    def NcGTE(self):
+        """Power of C (W).
+        """
+        return self.lcgte_r * self.Bf / float(self.ETAm_gte)
+
+    @property
+    def Gr(self):
+        """Gas consumption through GT (kg of gas / sec).
+        """
+        return self.Giair + self.Bf
+
+    @property
+    def NelGTE(self):
+        """Power of GTE electric generator (W).
+        """
+        return self.ETAg_gte * (self.NgtGTE - self.NcGTE)
+
+    @property
+    def Q1_gte(self):
+        """Amount of heat given for CC (J/s)
+        """
+        return self.Ql_h * self.ETAc_c * self.Bf
+
+    @property
+    def ETAelGTE(self):
+        """Electrical efficiency of GT.
+        """
+        return self.NelGTE / float(self.Q1_gte)
+
 
 if __name__ == '__main__':
     real_calc = RealCalc(**INIT_DATA)
+    print real_calc.ETAelGTE

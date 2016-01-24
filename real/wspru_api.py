@@ -1,6 +1,3 @@
-import inspect
-
-
 # third party
 import requests
 from bs4 import BeautifulSoup
@@ -29,9 +26,12 @@ class WspRuAPI(object):
                 gas_specification=args[0], p=args[1], s=args[2])
         elif wspg in ('PST', 'PSUBT'):
             data = dict(t=args[0])
+        elif wspg == 'MMGS':
+            data = dict(gas_specification=args[0])
         return "&".join("%s=%s" % (k, v) for k, v in data.items())
 
-    def _get_result(self, url, wspg, *args):
+    def _get_result(self, f_name, wspg, *args):
+        url = self.url_format % (f_name + wspg)
         data = self._gen_data(wspg, *args)
         response = requests.get(url, params=data)
         html_doc = response.content.decode('cp1251').encode('utf-8')
@@ -39,16 +39,12 @@ class WspRuAPI(object):
         return float(soup.find('strong').text.replace(',', '.'))
 
     def wspg(self, wspg, *args):
-        f_name = inspect.stack()[0][3]
-        url = self.url_format % (f_name + wspg)
-        return self._get_result(url, wspg, *args)
+        return self._get_result('wspg', wspg, *args)
 
     def wsp(self, wspg, *args):
-        f_name = inspect.stack()[0][3]
-        url = self.url_format % (f_name + wspg)
-        return self._get_result(url, wspg, *args)
+        return self._get_result('wsp', wspg, *args)
 
 
 if __name__ == '__main__':
     api = WspRuAPI()
-    print api.wspg('TGSPS', 'N2', 100000, 7000.234)
+    print api.wspg('TGSPS', 'N2', 10000000, 7000.234)

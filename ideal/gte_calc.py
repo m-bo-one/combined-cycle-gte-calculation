@@ -2,23 +2,14 @@
 from constants import *
 from init_data import INIT_DATA
 
-# third party
-from iapws.iapws97 import *
-
 
 class GTECalc(object):
 
     def __init__(self, **kwargs):
-        self.PIk = kwargs['PIk']
-        self.NtGTE = kwargs['NtGTE']
+        self.__dict__.update(kwargs)
         self.NelGTE = EL_P_koef * self.NtGTE
-        self.T1 = kwargs['T1']
-        self.T4 = kwargs['T4']
-        self.p1 = kwargs['p1']
         self.p4 = self.p1
         self.p3 = self.p2
-        # self.s2 = self.s1
-        # self.s4 = self.s3
 
     @property
     def p2(self):
@@ -85,12 +76,6 @@ class GTECalc(object):
         """Specific volume after gas turbine (m^2/kgg).
         """
         return R * self.T4 / float(self.p4 * 10**6)
-
-    # @property
-    # def s1(self):
-    #     """Specific enthropy before gas compressor (kJ/kgg*K).
-    #     """
-    #     return IAPWS97_PT(self.p1, self.T1).s0
 
     @property
     def lgt(self):
