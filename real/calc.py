@@ -13,6 +13,10 @@ class RealCalc(object):
         self.T1gte = self.Tiair = kwargs['Tiair']
         self.T3gte= kwargs['T3']
         self.phiiair = kwargs['phiiair']
+        self.gsg = kwargs['gsg']
+        self.gs0 = kwargs['gs0']
+        self.sigmapb = kwargs['sigmapb']
+        self.sigmapp = kwargs['sigmapp']
 
     @property
     def p2gte(self):
@@ -88,7 +92,7 @@ class RealCalc(object):
     def p3gte(self):
         """Pressure before GT (MPa).
         """
-        # TODO: return self.p2gte * (1 - self.sigma * self.pcc)
+        return self.p2gte * (1 - self.sigmapb)
 
     @property
     def s3gte(self):
@@ -100,7 +104,7 @@ class RealCalc(object):
     def p4gte(self):
         """Pressure after GT (MPa).
         """
-        # TODO: return self.piair * (1 - self.sigma * self.pgt)
+        return self.piair * (1 - self.sigmapp)
 
     @property
     def T4gte(self):
@@ -111,4 +115,3 @@ class RealCalc(object):
 
 if __name__ == '__main__':
     real_calc = RealCalc(**INIT_DATA)
-    print real_calc.h3gte
