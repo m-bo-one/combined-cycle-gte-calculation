@@ -79,22 +79,24 @@ class SPECalc(object):
         """
         return self.ETAtSPE * ETAoi * ETAem
 
-    def save_work_params_of_SPE(self, pte_result):
-        pte_result.write(format_work_params.format(
-            "Turbine work (kJ/kgws)", self.lst))
-        pte_result.write(format_work_params.format(
-            "Pump work (kJ/kgws)", self.lsp))
-        pte_result.write(format_work_params.format(
-            "Boiler heat (kJ/kgws)", self.qboiler))
-        pte_result.write(format_work_params.format(
-            "Thermal efficiency (percents)", (self.ETAtSPE * 100)))
-        pte_result.write(format_work_params.format(
-            "Electrical efficiency (percents)", (self.ETAelSPE * 100)))
+    def save_work_param_of_SPE(self, writer, text, param):
+        writer.write(format_work_params.format(text.encode('utf-8'), param))
 
     def save_results(self, writer):
-        writer.write('{0:50}{1}\n'.format('', 'Steam power plant'))
+        writer.write(
+            '{0:50}{1}\n'.format(
+                u'', u'Паротурбінна установка'.encode('utf-8')))
         writer.write(new_line_f)
-        self.save_work_params_of_SPE(writer)
+        self.save_work_param_of_SPE(
+            writer, u"Робота турбінни (кДж/кг водяної пари)", self.lst)
+        self.save_work_param_of_SPE(
+            writer, u"Робота насоса(кДж/кг водяної пари)", self.lsp)
+        self.save_work_param_of_SPE(
+            writer, u"Температура КУ (кДж/кг водяної пари)", self.qboiler)
+        self.save_work_param_of_SPE(
+            writer, u"Термічний ККД (відсотки)", (self.ETAtSPE * 100))
+        self.save_work_param_of_SPE(
+            writer, u"Електричний ККД (відсотки)", (self.ETAelSPE * 100))
 
 
 if __name__ == '__main__':

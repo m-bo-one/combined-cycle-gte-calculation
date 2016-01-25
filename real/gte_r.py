@@ -5,7 +5,7 @@ from init_data import INIT_DATA
 wspru_api = WspRuAPI()
 
 
-class RealCalc(object):
+class GTECalcR(object):
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -158,7 +158,7 @@ class RealCalc(object):
 
     @property
     def Q1_gte(self):
-        """Amount of heat given for CC (J/s)
+        """Amount of heat given for CC (W)
         """
         return self.Ql_h * self.ETAc_c * self.Bf
 
@@ -170,5 +170,5 @@ class RealCalc(object):
 
 
 if __name__ == '__main__':
-    real_calc = RealCalc(**INIT_DATA)
+    real_calc = GTECalcR(**INIT_DATA)
     print real_calc.ETAelGTE

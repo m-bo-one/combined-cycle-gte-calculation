@@ -7,6 +7,7 @@ from combined import CombinedCalc
 # third party
 import matplotlib.pyplot as plt
 from numpy import *
+from matplotlib import rc
 
 
 GTES = {
@@ -93,6 +94,9 @@ class GTEAnalysisResult(object):
         return recal_engines
 
     def plot_ETAt(self):
+        font = {'family': 'Droid Sans',
+                'weight': 'normal'}
+        rc('font', **font)
         fig, ax = plt.subplots()
         rects1 = plt.bar(
             self.index,
@@ -115,7 +119,7 @@ class GTEAnalysisResult(object):
         self.autolabel(ax, rects3)
         ax.legend(
             (rects1[0], rects2[0], rects3[0]), ('GTE', 'SPE', 'CC'), loc=4)
-        ax.set_ylabel('Thermal efficiency')
+        ax.set_ylabel(u'Термічне ККД')
         plt.savefig(MEDIA_ROOT + 'engines_thermal_efficiency.png', dpi=400)
         plt.clf()
 
@@ -128,7 +132,7 @@ class GTEAnalysisResult(object):
             color="b")
         plt.xticks(self.index + 0.5 * self.bar_width, self.recal_engines['names'])
         self.autolabel(ax, rects1)
-        ax.set_ylabel('Temperature of exhasted gases (K)')
+        ax.set_ylabel(u'Температура вихлопних газів (К)')
         plt.savefig(MEDIA_ROOT + 'engines_exhaust.png', dpi=400)
         plt.clf()
 
@@ -141,7 +145,7 @@ class GTEAnalysisResult(object):
             color="r")
         plt.xticks(self.index + 0.5 * self.bar_width, self.recal_engines['names'])
         self.autolabel(ax, rects1)
-        ax.set_ylabel('Pressure ratio')
+        ax.set_ylabel(u'Ступінь стиснення')
         plt.savefig(MEDIA_ROOT + 'engines_pressure_ration.png', dpi=400)
         plt.clf()
 
@@ -154,7 +158,7 @@ class GTEAnalysisResult(object):
             color="g")
         plt.xticks(self.index + 0.5 * self.bar_width, self.recal_engines['names'])
         self.autolabel(ax, rects1)
-        ax.set_ylabel('Power (MW)')
+        ax.set_ylabel(u'Потужність (МВт)')
         plt.savefig(MEDIA_ROOT + 'engines_power.png', dpi=400)
         plt.clf()
 

@@ -52,16 +52,19 @@ PLOT_CONFIG = {
     },
     "file_name": None,
     "GTE": {
-        "grid": "ro-",
-        "name": "GTE" # default value
+        "grid": "r-",
+        "name": "GTE", # default value
+        "trs": u"ГТУ"
     },
     "SPE": {
-        "grid": "bo-",
-        "name": "SPE" # default value
+        "grid": "b-",
+        "name": "SPE", # default value
+        "trs": u"ПТУ"
     },
     "CC": {
-        "grid": "go-",
-        "name": "CC" # default value
+        "grid": "g-",
+        "name": "CC", # default value
+        "trs": u"ПГУ"
     },
 }
 MEDIA_ROOT = 'pictures/'
