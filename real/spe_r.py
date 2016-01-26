@@ -13,13 +13,18 @@ class SPECalcR(GTECalcR):
         self.p1gte = self.piair
         self.T1gte = self.Tiair
         self._check_boiler_temperature()
-        self.Q1_cc = self.Q1_spe = self.Q1_gte
+        self.Q1_cc = self.Q1_gte
 
     def _check_boiler_temperature(self):
-        """Check difference of temperature before boiler and after (not less than 20 oC).
+        """Check difference of temperature before boiler and after
+        (not less than 20 oC).
         """
-        if self.T4gte - self.Tb_out < 20:
-            raise BaseException('Temperature must be more than 20 oC')
+        _diff = self.T4gte - self.Tb_out
+        if _diff < 20:
+            raise BaseException('Difference of GTE exhausted gases {0} and '
+                'boiler out in cycle {1} must be more than 20 oC. (Now {2})' \
+                .format(
+                    self.T4gte, self.Tb_out, _diff))
         return
 
     @property
@@ -65,6 +70,18 @@ class SPECalcR(GTECalcR):
         return wspru_api.wsp('HPT', self.p2spe, self.T2spe)
 
     @property
+    def hout(self):
+        """Enthalpy of boiler exhausted gases (J/kgg).
+        """
+        return self.hb_in - self.ETAb * (self.hb_in - wspru_api.wspg('HGST', self.gsg, self.Tiair))
+
+    @property
+    def teta_out(self):
+        """Temperature of exhausted gases (K).
+        """
+        return wspru_api.wspg('TGSH', self.gsg, self.hout)
+
+    @property
     def Pst(self):
         """Inner ST power (W).
         """
@@ -83,6 +100,18 @@ class SPECalcR(GTECalcR):
         return self.NelGTE + self.NelSPE
 
     @property
+    def Q1b(self):
+        """Amount of heat given for boiler (W).
+        """
+        return self.Q1_gte * (1 - self.ETAelGTE)
+
+    @property
+    def Q1_spe(self):
+        """Amount of heat given for SPE (W).
+        """
+        return self.Q1b * self.ETAb
+
+    @property
     def ETAelSPE(self):
         """Electrical efficiency of SPE.
         """
@@ -94,10 +123,14 @@ class SPECalcR(GTECalcR):
         """
         return self.NelCC / float(self.Q1_cc)
 
+    # @property
+    # def ETAb(self):
+    #     """Boiler efficiency.
+    #     """
+    #     return (self.T4gte - self.teta_out) / float(self.T4gte - self.Tiair)
+
 
 if __name__ == '__main__':
     real_calc = SPECalcR(**INIT_DATA)
-    # print "ETA gte: %s" % real_calc.ETAelGTE
-    # print "ETA spe: %s" % real_calc.ETAelSPE
-    # print "ETA cc: %s" % real_calc.ETAelCC
-    print "ETA boiler: %s" % real_calc.ETAb
+    print real_calc.NelCC
+    print real_calc.ETAelCC

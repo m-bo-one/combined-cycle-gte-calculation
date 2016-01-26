@@ -13,7 +13,8 @@ class WspRuAPI(object):
         @gas_specification - type of gas (Ex.: AirMix, Air, N2 etc.);
         @p - pressure (Pa);
         @t - temperature (K);
-        @s - enthropy (J/(kg*K))
+        @s - enthropy (J/(kg*K));
+        @h - enthalpy (J/kg);
         """
         if f_type == 'SGSPT':
             data = dict(
@@ -23,6 +24,9 @@ class WspRuAPI(object):
         elif f_type == 'HGST':
             data = dict(
                 gas_specification=args[0], t=args[1])
+        elif f_type == 'TGSH':
+            data = dict(
+                gas_specification=args[0], h=args[1])
         elif f_type == 'TGSPS':
             data = dict(
                 gas_specification=args[0], p=args[1], s=args[2])

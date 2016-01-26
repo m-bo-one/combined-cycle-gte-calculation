@@ -171,4 +171,15 @@ class GTECalcR(object):
 
 if __name__ == '__main__':
     real_calc = GTECalcR(**INIT_DATA)
-    print real_calc.ETAelGTE
+    with open('test_r.txt', 'w') as writer:
+        for x in xrange(1, 5):
+            pressure = getattr(real_calc, 'p%sgte' % x)
+            temperature = getattr(real_calc, 'T%sgte' % x)
+            enthropy = wspru_api.wspg('SGSPT', 'AirMix', pressure, temperature)
+            writer.write('Point %s\n' % x)
+            writer.write("pressure: %s" % pressure)
+            writer.write('\n')
+            writer.write("temp: %s" % temperature)
+            writer.write('\n')
+            writer.write("enthropy: %s" % enthropy)
+            writer.write('\n' + "-" * 10 + '\n')
