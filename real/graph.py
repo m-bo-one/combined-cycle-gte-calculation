@@ -49,19 +49,18 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
     plt.savefig('pictures/' + f_name, dpi=450)
     plt.clf()
 
-
 def plot_graph(x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count):
     x_list = linspace(x_1, x_2, count)
     y_list = {
         "GTE": [],
-        "SPE": [],
+        # "SPE": [],
         "CC": []
     }
     for x in xrange(count):
         INIT_DATA[x_name] = x_list[x]
         real_calc = SPECalcR(**INIT_DATA)
         y_list["GTE"].append(getattr(real_calc, y_name + "GTE"))
-        y_list["SPE"].append(getattr(real_calc, y_name + "SPE"))
+        # y_list["SPE"].append(getattr(real_calc, y_name + "SPE"))
         y_list["CC"].append(getattr(real_calc, y_name + "CC"))
 
     plt.plot(
@@ -70,12 +69,12 @@ def plot_graph(x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count)
         color=random.rand(3, 1),
         label=u'ГТУ'
     )
-    plt.plot(
-        x_list, y_list["SPE"],
-        'r-',
-        color=random.rand(3, 1),
-        label=u'ПТУ'
-    )
+    # plt.plot(
+    #     x_list, y_list["SPE"],
+    #     'r-',
+    #     color=random.rand(3, 1),
+    #     label=u'ПТУ'
+    # )
     plt.plot(
         x_list, y_list["CC"],
         'y-',
@@ -125,16 +124,27 @@ if __name__ == '__main__':
     #     f_name='Tb_out-ETAel.png',
     #     count=20
     # )
+    # plot_graph(
+    #     x_name='T3gte',
+    #     y_name='ETAel',
+    #     x_label=u'Температура за КС, (К)',
+    #     y_label=u'Електричний ККД',
+    #     x_1=900 + KELVIN_CONST,
+    #     x_2=1300 + KELVIN_CONST,
+    #     title=u'Залежність між температурою за КС та електричним ККД',
+    #     f_name='T3gte-ETAel.png',
+    #     count=10
+    # )
     plot_graph(
         x_name='T3gte',
-        y_name='ETAel',
+        y_name='Nel',
         x_label=u'Температура за КС, (К)',
-        y_label=u'Електричний ККД',
+        y_label=u'Електрична потужність (Вт)',
         x_1=900 + KELVIN_CONST,
         x_2=1300 + KELVIN_CONST,
-        title=u'Залежність між температурою за КС та електричним ККД',
-        f_name='T3gte-ETAel.png',
-        count=20
+        title=u'Залежність між температурою за КС та електричною потужністю (Вт)',
+        f_name='T3gte-Nel.png',
+        count=10
     )
     # plot_Nel_ETAel(
     #     'T3gte',
