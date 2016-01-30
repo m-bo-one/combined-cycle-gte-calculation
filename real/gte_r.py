@@ -91,10 +91,10 @@ class GTECalcR(object):
         return self.p2gte * (1 - self.sigmapb)
 
     @property
-    def s3gte(self):
-        """Enthropy before GT (kJ/kgg*K).
+    def s4gte(self):
+        """Enthropy after GT (kJ/kgg*K).
         """
-        return wspru_api.wspg('SGSPT', self.gsg, self.p3gte, self.T3gte)
+        return wspru_api.wspg('SGSPT', self.gsg, self.p4gte, self.T4gte)
 
     @property
     def p4gte(self):
@@ -103,10 +103,10 @@ class GTECalcR(object):
         return self.piair * (1 - self.sigmapp)
 
     @property
-    def T4gte(self):
-        """Temperature of air after GT at isoenthropic pressure (K).
+    def T3gte(self):
+        """Temperature of air after CC at isoenthropic pressure (K).
         """
-        return wspru_api.wspg('TGSPS', self.gsiair, self.p4gte, self.s3gte)
+        return wspru_api.wspg('TGSPS', self.gsiair, self.p3gte, self.s4gte)
 
     @property
     def lgtgte(self):

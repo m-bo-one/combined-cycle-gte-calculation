@@ -66,7 +66,7 @@ def plot_graph(x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count)
     plt.plot(
         x_list, y_list["GTE"],
         'g-',
-        color=random.rand(3, 1),
+        # color=random.rand(3, 1),
         label=u'ГТУ'
     )
     # plt.plot(
@@ -77,8 +77,8 @@ def plot_graph(x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count)
     # )
     plt.plot(
         x_list, y_list["CC"],
-        'y-',
-        color=random.rand(3, 1),
+        'r-',
+        # color=random.rand(3, 1),
         label=u'ПГУ'
     )
     plt.xlabel(x_label)
@@ -125,25 +125,47 @@ if __name__ == '__main__':
     #     count=20
     # )
     # plot_graph(
-    #     x_name='T3gte',
+    #     x_name='T4gte',
     #     y_name='ETAel',
-    #     x_label=u'Температура за КС, (К)',
+    #     x_label=u'Температура за ГТ, (К)',
     #     y_label=u'Електричний ККД',
-    #     x_1=900 + KELVIN_CONST,
-    #     x_2=1300 + KELVIN_CONST,
-    #     title=u'Залежність між температурою за КС та електричним ККД',
-    #     f_name='T3gte-ETAel.png',
+    #     x_1=400 + KELVIN_CONST,
+    #     x_2=600 + KELVIN_CONST,
+    #     title=u'Залежність між температурою за ГТ та електричним ККД',
+    #     f_name='T4gte-ETAel.png',
+    #     count=10
+    # )
+    # plot_graph(
+    #     x_name='T4gte',
+    #     y_name='Nel',
+    #     x_label=u'Температура за ГТ, (К)',
+    #     y_label=u'Електрична потужність (Вт)',
+    #     x_1=400 + KELVIN_CONST,
+    #     x_2=600 + KELVIN_CONST,
+    #     title=u'Залежність між температурою за ГТ та електричною потужністю (Вт)',
+    #     f_name='T4gte-Nel.png',
     #     count=10
     # )
     plot_graph(
-        x_name='T3gte',
+        x_name='PIk',
+        y_name='ETAel',
+        x_label=u'Степінь підвищення тиску',
+        y_label=u'Електричний ККД',
+        x_1=10,
+        x_2=15,
+        title=u'Залежність між степенем підвищення тиску та електричним ККД',
+        f_name='PIk-ETAel.png',
+        count=10
+    )
+    plot_graph(
+        x_name='PIk',
         y_name='Nel',
-        x_label=u'Температура за КС, (К)',
+        x_label=u'Степінь підвищення тиску',
         y_label=u'Електрична потужність (Вт)',
-        x_1=900 + KELVIN_CONST,
-        x_2=1300 + KELVIN_CONST,
-        title=u'Залежність між температурою за КС та електричною потужністю (Вт)',
-        f_name='T3gte-Nel.png',
+        x_1=10,
+        x_2=15,
+        title=u'Залежність між степенем підвищення тиску та електричною потужністю (Вт)',
+        f_name='PIk-Nel.png',
         count=10
     )
     # plot_Nel_ETAel(
