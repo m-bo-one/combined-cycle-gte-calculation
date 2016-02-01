@@ -34,7 +34,8 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
             (real_calc.ETAelCC * 100, )
         )
 
-        plt.plot(_r_dict[p][1], _r_dict[p][0],
+        plt.plot(
+            _r_dict[p][1], _r_dict[p][0],
             'o',
             color=random.rand(3, 1),
         )
@@ -49,41 +50,34 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
     plt.savefig('pictures/' + f_name, dpi=450)
     plt.clf()
 
-def plot_graph(x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count):
+
+def plot_graph(
+    x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count
+):
     x_list = linspace(x_1, x_2, count)
     y_list = {
         "GTE": [],
-        # "SPE": [],
         "CC": []
     }
     for x in xrange(count):
         INIT_DATA[x_name] = x_list[x]
         real_calc = SPECalcR(**INIT_DATA)
         y_list["GTE"].append(getattr(real_calc, y_name + "GTE"))
-        # y_list["SPE"].append(getattr(real_calc, y_name + "SPE"))
         y_list["CC"].append(getattr(real_calc, y_name + "CC"))
 
     plt.plot(
         x_list, y_list["GTE"],
         'g-',
-        # color=random.rand(3, 1),
         label=u'ГТУ'
     )
-    # plt.plot(
-    #     x_list, y_list["SPE"],
-    #     'r-',
-    #     color=random.rand(3, 1),
-    #     label=u'ПТУ'
-    # )
     plt.plot(
         x_list, y_list["CC"],
         'r-',
-        # color=random.rand(3, 1),
         label=u'ПГУ'
     )
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.title(title, ha='center', va='center')
+    # plt.title(title, ha='center', va='center')
     plt.legend(loc=7)
     plt.grid(True)
     plt.savefig('pictures/' + f_name, dpi=150)
@@ -124,32 +118,32 @@ if __name__ == '__main__':
     #     f_name='Tb_out-ETAel.png',
     #     count=20
     # )
-    # plot_graph(
-    #     x_name='T4gte',
-    #     y_name='ETAel',
-    #     x_label=u'Температура за ГТ, (К)',
-    #     y_label=u'Електричний ККД',
-    #     x_1=400 + KELVIN_CONST,
-    #     x_2=600 + KELVIN_CONST,
-    #     title=u'Залежність між температурою за ГТ та електричним ККД',
-    #     f_name='T4gte-ETAel.png',
-    #     count=10
-    # )
-    # plot_graph(
-    #     x_name='T4gte',
-    #     y_name='Nel',
-    #     x_label=u'Температура за ГТ, (К)',
-    #     y_label=u'Електрична потужність (Вт)',
-    #     x_1=400 + KELVIN_CONST,
-    #     x_2=600 + KELVIN_CONST,
-    #     title=u'Залежність між температурою за ГТ та електричною потужністю (Вт)',
-    #     f_name='T4gte-Nel.png',
-    #     count=10
-    # )
+    plot_graph(
+        x_name='T4gte',
+        y_name='ETAel',
+        x_label=u'Температура за ГТ, (К)',
+        y_label=u'Електричний ККД',
+        x_1=400 + KELVIN_CONST,
+        x_2=600 + KELVIN_CONST,
+        title=u'Залежність між температурою за ГТ та електричним ККД',
+        f_name='T4gte-ETAel.png',
+        count=10
+    )
+    plot_graph(
+        x_name='T4gte',
+        y_name='Nel',
+        x_label=u'Температура за ГТ, (К)',
+        y_label=u'Електрична потужність (Вт)',
+        x_1=400 + KELVIN_CONST,
+        x_2=600 + KELVIN_CONST,
+        title=u'Залежність між температурою за ГТ та електричною потужністю (Вт)',
+        f_name='T4gte-Nel.png',
+        count=10
+    )
     plot_graph(
         x_name='PIk',
         y_name='ETAel',
-        x_label=u'Степінь підвищення тиску',
+        x_label=u'Ступінь підвищення тиску в компресорі',
         y_label=u'Електричний ККД',
         x_1=10,
         x_2=15,
@@ -160,7 +154,7 @@ if __name__ == '__main__':
     plot_graph(
         x_name='PIk',
         y_name='Nel',
-        x_label=u'Степінь підвищення тиску',
+        x_label=u'Ступінь підвищення тиску в компресорі',
         y_label=u'Електрична потужність (Вт)',
         x_1=10,
         x_2=15,

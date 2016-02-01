@@ -118,8 +118,8 @@ class GTEAnalysisResult(object):
         self.autolabel(ax, rects2)
         self.autolabel(ax, rects3)
         ax.legend(
-            (rects1[0], rects2[0], rects3[0]), ('GTE', 'SPE', 'CC'), loc=4)
-        ax.set_ylabel(u'Термічне ККД')
+            (rects1[0], rects2[0], rects3[0]), (u'ГТУ', u'ПТУ', u'ПГУ'), loc=4)
+        ax.set_ylabel(u'Термічний ККД')
         plt.savefig(MEDIA_ROOT + 'engines_thermal_efficiency.png', dpi=400)
         plt.clf()
 
@@ -132,7 +132,7 @@ class GTEAnalysisResult(object):
             color="b")
         plt.xticks(self.index + 0.5 * self.bar_width, self.recal_engines['names'])
         self.autolabel(ax, rects1)
-        ax.set_ylabel(u'Температура вихлопних газів (К)')
+        ax.set_ylabel(u'Температура вихлопних газів з ГТ (К)')
         plt.savefig(MEDIA_ROOT + 'engines_exhaust.png', dpi=400)
         plt.clf()
 
@@ -145,7 +145,7 @@ class GTEAnalysisResult(object):
             color="r")
         plt.xticks(self.index + 0.5 * self.bar_width, self.recal_engines['names'])
         self.autolabel(ax, rects1)
-        ax.set_ylabel(u'Ступінь стиснення')
+        ax.set_ylabel(u'Ступінь стиснення в компресорі')
         plt.savefig(MEDIA_ROOT + 'engines_pressure_ration.png', dpi=400)
         plt.clf()
 

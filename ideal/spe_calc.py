@@ -73,12 +73,6 @@ class SPECalc(object):
         """
         return (self.lst - self.lsp) / float(self.qboiler)
 
-    @property
-    def ETAelSPE(self):
-        """Absolute electrical efficiency of SPE (dimensionless).
-        """
-        return self.ETAtSPE * ETAoi * ETAem
-
     def save_work_param_of_SPE(self, writer, text, param):
         writer.write(format_work_params.format(text.encode('utf-8'), param))
 

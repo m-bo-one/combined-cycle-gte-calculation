@@ -12,7 +12,7 @@ from numpy import linspace
 class TotalResult(CombinedCalc):
 
     @staticmethod
-    def plot_graph_dependency(plot_config):
+    def plot_graph_dependency(plot_config, simple=False):
         font = {'family': 'Droid Sans',
                 'weight': 'normal'}
         rc('font', **font)
@@ -29,50 +29,59 @@ class TotalResult(CombinedCalc):
             change_key = plot_config['x']['data']['name']
             INIT_DATA[change_key] = setted_param
             combined_calc = CombinedCalc(**INIT_DATA)
-            for key in list_of_recalculated_param_y.keys():
+            for key in xrange(len(plot_config['y']['data']['names'])):
                 list_of_recalculated_param_y[key] \
                     .append(getattr(
                         combined_calc,
                         plot_config['y']['data']['names'][key]))
-        plt.plot(
-            list_of_setted_param_x,
-            list_of_recalculated_param_y[0],
-            plot_config['GTE']['grid'],
-            label=plot_config['GTE']['trs']
-        )
-        plt.plot(
-            list_of_setted_param_x,
-            list_of_recalculated_param_y[1],
-            plot_config['SPE']['grid'],
-            label=plot_config['SPE']['trs']
-        )
-        plt.plot(
-            list_of_setted_param_x,
-            list_of_recalculated_param_y[2],
-            plot_config['CC']['grid'],
-            label=plot_config['CC']['trs']
-        )
+
+        if simple:
+            plt.plot(
+                list_of_setted_param_x,
+                list_of_recalculated_param_y[0],
+                plot_config['CC']['grid'],
+                label=plot_config['CC']['trs']
+            )
+        else:
+            plt.plot(
+                list_of_setted_param_x,
+                list_of_recalculated_param_y[0],
+                plot_config['GTE']['grid'],
+                label=plot_config['GTE']['trs']
+            )
+            # plt.plot(
+            #     list_of_setted_param_x,
+            #     list_of_recalculated_param_y[1],
+            #     plot_config['SPE']['grid'],
+            #     label=plot_config['SPE']['trs']
+            # )
+            plt.plot(
+                list_of_setted_param_x,
+                list_of_recalculated_param_y[2],
+                plot_config['CC']['grid'],
+                label=plot_config['CC']['trs']
+            )
         plt.xlabel(plot_config['x']['label'])
         plt.ylabel(plot_config['y']['label'])
-        plt.title(plot_config['title'])
+        # plt.title(plot_config['title'])
         plt.grid(True)
-        plt.legend()
+        plt.legend(loc=7)
         plt.savefig(plot_config['file_name'], dpi=400)
         plt.clf()
 
     def plot_ETAt_PIk(self):
         plot_config = PLOT_CONFIG.copy()
         plot_config['y']['label'] = u"Термічний ККД"
-        plot_config['x']['label'] = u"Ступінь стиснення"
+        plot_config['x']['label'] = u"Ступінь підвищення тиску в компресорі"
         plot_config['x']['data']['from'] = 10
-        plot_config['x']['data']['to'] = 20
-        plot_config['x']['data']['count'] = 100
+        plot_config['x']['data']['to'] = 15
+        plot_config['x']['data']['count'] = 10
         plot_config['x']['data']['name'] = u"Пк"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-PIk.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
-            u"та ступенем стиснення"
+            u"та ступенем підвищення тиску"
         self.plot_graph_dependency(plot_config)
 
     def plot_ETAt_T1(self):
@@ -84,7 +93,7 @@ class TotalResult(CombinedCalc):
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"T1"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-T1.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
             u"та температурою перед компресором"
@@ -93,28 +102,28 @@ class TotalResult(CombinedCalc):
     def plot_ETAt_T4(self):
         plot_config = PLOT_CONFIG.copy()
         plot_config['y']['label'] = u"Термічний ККД"
-        plot_config['x']['label'] = u"Температура після турбіни, (К)"
-        plot_config['x']['data']['from'] = 200 + KELVIN_CONST
-        plot_config['x']['data']['to'] = 400 + KELVIN_CONST
+        plot_config['x']['label'] = u"Температура після ГТ, (К)"
+        plot_config['x']['data']['from'] = 400 + KELVIN_CONST
+        plot_config['x']['data']['to'] = 600 + KELVIN_CONST
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"T4"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-T4.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
-            u"та температурою після турбіни"
+            u"та температурою після ГТ"
         self.plot_graph_dependency(plot_config)
 
     def plot_ETAt_p6(self):
         plot_config = PLOT_CONFIG.copy()
         plot_config['y']['label'] = u"Термічний ККД"
         plot_config['x']['label'] = u"Тиск на вході в парову турбіну, (МПа)"
-        plot_config['x']['data']['from'] = 0.1
+        plot_config['x']['data']['from'] = 3
         plot_config['x']['data']['to'] = 20
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"p6"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-p6.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
             u"та тиском на вході в парову турбіну"
@@ -129,7 +138,7 @@ class TotalResult(CombinedCalc):
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"T6"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-T6.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
             u"та температурою на вході в парову турбіну"
@@ -144,7 +153,7 @@ class TotalResult(CombinedCalc):
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"Tcr"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-Tcr.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
             u"та різницею температур в конденсаторі"
@@ -159,20 +168,52 @@ class TotalResult(CombinedCalc):
         plot_config['x']['data']['count'] = 100
         plot_config['x']['data']['name'] = u"T5"
         plot_config['y']['data']['names'] = [
-            "ETAtGTE", "ETAtSPE", "ETAtCombined"]
+            "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-T5.png"
         plot_config['title'] = u"Залежність між термічним ККД " + \
             u"та температурою за котлом-утилізатором"
         self.plot_graph_dependency(plot_config)
 
+    def plot_m_boiler_T5(self):
+        plot_config = PLOT_CONFIG.copy()
+        plot_config['y']['label'] = u"Відношення витрати газу до води та водяного пару"
+        plot_config['x']['label'] = u"Температура за котлом-утилізатором, (К)"
+        plot_config['x']['data']['from'] = 100 + KELVIN_CONST
+        plot_config['x']['data']['to'] = 200 + KELVIN_CONST
+        plot_config['x']['data']['count'] = 100
+        plot_config['x']['data']['name'] = u"T5"
+        plot_config['y']['data']['names'] = [
+            "m_boiler"]
+        plot_config['file_name'] = MEDIA_ROOT + "m_boiler-T5.png"
+        plot_config['title'] = u"Залежність між відношенням витрати газу " + \
+            u"та температурою за котлом-утилізатором"
+        self.plot_graph_dependency(plot_config, True)
+
+    def plot_m_boiler_T4(self):
+        plot_config = PLOT_CONFIG.copy()
+        plot_config['y']['label'] = u"Відношення витрати газу до води та водяного пару"
+        plot_config['x']['label'] = u"Температура за ГТ, (К)"
+        plot_config['x']['data']['from'] = 400 + KELVIN_CONST
+        plot_config['x']['data']['to'] = 600 + KELVIN_CONST
+        plot_config['x']['data']['count'] = 100
+        plot_config['x']['data']['name'] = u"T4"
+        plot_config['y']['data']['names'] = [
+            "m_boiler"]
+        plot_config['file_name'] = MEDIA_ROOT + "m_boiler-T4.png"
+        plot_config['title'] = u"Залежність між відношенням витрати газу " + \
+            u"та температурою за ГТ"
+        self.plot_graph_dependency(plot_config, True)
+
     def plot_graphs(self):
         self.plot_ETAt_PIk()
-        self.plot_ETAt_T1()
-        self.plot_ETAt_T4()
-        self.plot_ETAt_p6()
-        self.plot_ETAt_T6()
-        self.plot_ETAt_Tcr()
-        self.plot_ETAt_T5()
+        # self.plot_ETAt_T1()
+        # self.plot_ETAt_T4()
+        # self.plot_ETAt_p6()
+        # self.plot_ETAt_T6()
+        # self.plot_ETAt_Tcr()
+        # self.plot_ETAt_T5()
+        # self.plot_m_boiler_T5()
+        # self.plot_m_boiler_T4()
 
 if __name__ == '__main__':
     total = TotalResult(**INIT_DATA)
