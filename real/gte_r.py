@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from wspru_api import WspRuAPI
 from init_data import INIT_DATA
 
@@ -14,13 +15,13 @@ class GTECalcR(object):
 
     @property
     def p2gte(self):
-        """Pressure after gas compressor (MPa).
+        """Тиск після ГК (Па).
         """
         return self.PIk * self.p1gte
 
     @property
     def pbiair(self):
-        """Boundary pressure of water at the temperature of environment (MPa).
+        """Граничний тиск води при температурі навколишнього середовища (Па).
         """
         if self.Tiair > 273.15:
             _p = wspru_api.wsp('PST', self.Tiair)
@@ -30,147 +31,148 @@ class GTECalcR(object):
 
     @property
     def xiair(self):
-        """The molar water content (unitless).
+        """Молярний вміст води.
         """
         return self.phiiair * self.pbiair \
             / float(self.piair - self.phiiair * self.pbiair)
 
     @property
     def diair(self):
-        """The mass water content (kg of steam/kg of dry air).
+        """Масовий вміст води (кгп/кгсв).
         """
         return self.xiair * wspru_api.wspg('MMGS', 'H2O') \
             / float(wspru_api.wspg('MMGS', 'AirMix'))
 
     @property
     def gsiair(self):
-        """Estimated mixture of moist air (unitless).
+        """Створення розрахункової суміші вологого повітря.
         """
         return "AirMix:1;H2O:" + str(self.xiair)
 
     @property
     def h1gte(self):
-        """Enthalpy of moisture air at atmospheric conditions (J/kga).
+        """Ентальпія вологого повітря при атмосферних умовах (Дж/кгв).
         """
         return wspru_api.wspg('HGST', self.gsiair, self.Tiair)
 
     @property
     def h2gte(self):
-        """Enthalpy of air after compressor at isoenthropic pressure (J/kga).
+        """Ентальпія повітря за К при ізоентропному стиску (Дж/кгв).
         """
         return wspru_api.wspg('HGST', self.gsiair, self.T2gte)
 
     @property
     def s1gte(self):
-        """Enthropy of inlet air (kj/kga*K).
+        """Ентропія повітря перед К (Дж/кгв*К).
         """
         return wspru_api.wspg('SGSPT', self.gsiair, self.piair, self.Tiair)
 
     @property
     def T2gte(self):
-        """Temperature of air after compressor at isoenthropic pressure (K).
+        """Температура повітря за К при ізоентропному стиску (К).
         """
         return wspru_api.wspg('TGSPS', self.gsiair, self.p2gte, self.s1gte)
 
     @property
     def h3gte(self):
-        """Enthalpy of combusted products at the temperature before GT (J/kgg).
+        """Ентальпія продуктів зорання при температурі перед ГТ (Дж/кгг).
         """
         return wspru_api.wspg('HGST', self.gsg, self.T3gte)
 
     @property
     def h4gte(self):
-        """Enthalpy of working body after GT at isoentropic expansion (J/kgg).
+        """Ентальпія робочого тіла за ГТ при ізоентропному розширенні (Дж/кгг).
         """
         return wspru_api.wspg('HGST', self.gsg, self.T4gte)
 
     @property
     def p3gte(self):
-        """Pressure before GT (MPa).
+        """Тиск до ГТ (Па).
         """
         return self.p2gte * (1 - self.sigmapb)
 
     @property
     def s4gte(self):
-        """Enthropy after GT (kJ/kgg*K).
+        """Ентропя після ГТ (Дж/кгв*К).
         """
         return wspru_api.wspg('SGSPT', self.gsg, self.p4gte, self.T4gte)
 
     @property
     def p4gte(self):
-        """Pressure after GT (MPa).
+        """Тиск після ГТ (Па).
         """
         return self.piair * (1 - self.sigmapp)
 
     @property
     def T3gte(self):
-        """Temperature of air after CC at isoenthropic pressure (K).
+        """Температура після КС при ізоентропному розширенні (K).
         """
         return wspru_api.wspg('TGSPS', self.gsiair, self.p3gte, self.s4gte)
 
     @property
     def lgtgte(self):
-        """Heat drop in GT at isoenthropic expansion (J/kgg).
+        """Теплоперепад в ГТ при ізоентропному розширенні (Дж/кгг).
         """
         return self.h3gte - self.h4gte
 
     @property
     def lgtgte_r(self):
-        """Heat drop in GT at real expansion (J/kgg).
+        """Теплоперепад в ГТ при реальному розширенні (Дж/кгг).
         """
         return self.lgtgte * self.ETAoi_gt
 
     @property
     def NgtGTE(self):
-        """Power of GT (W).
+        """Потужність ГТ (Вт).
         """
         return self.lgtgte_r * self.Gr * self.ETAm_gte
 
     @property
     def lcgte(self):
-        """Heat drop in C at isoenthropic expansion (J/kgg).
+        """Теплоперепад в К при ізоентропному стиску  (Дж/кгг).
         """
         return self.h2gte - self.h1gte
 
     @property
     def lcgte_r(self):
-        """Heat drop in C at real expansion (J/kgg).
+        """Теплоперепад в К при реальному стиску (Дж/кгг).
         """
         return self.lcgte / float(self.ETAoi_c)
 
     @property
     def NcGTE(self):
-        """Power of C (W).
+        """Потужність компресора (Вт).
         """
         return self.lcgte_r * self.Bf / float(self.ETAm_gte)
 
     @property
     def Gr(self):
-        """Gas consumption through GT (kg of gas / sec).
+        """Витрата газу через ГТ (кгг/с).
         """
         return self.Giair + self.Bf
 
     @property
     def NelGTE(self):
-        """Power of GTE electric generator (W).
+        """Потужність електрогенератора ГТУ (Вт).
         """
         return self.ETAg_gte * (self.NgtGTE - self.NcGTE)
 
     @property
     def Q1_gte(self):
-        """Amount of heat given for CC (W)
+        """Теплота, підведена в ГТУ (Вт)
         """
         return self.Ql_h * self.ETAc_c * self.Bf
 
     @property
     def ETAelGTE(self):
-        """Electrical efficiency of GT.
+        """Електричний ККД ГТУ.
         """
         return self.NelGTE / float(self.Q1_gte)
 
 
 if __name__ == '__main__':
     real_calc = GTECalcR(**INIT_DATA)
+    print real_calc.s1gte
     with open('test_r.txt', 'w') as writer:
         for x in xrange(1, 5):
             pressure = getattr(real_calc, 'p%sgte' % x)
