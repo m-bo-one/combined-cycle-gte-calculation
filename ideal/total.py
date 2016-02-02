@@ -49,12 +49,12 @@ class TotalResult(CombinedCalc):
                 plot_config['GTE']['grid'],
                 label=plot_config['GTE']['trs']
             )
-            # plt.plot(
-            #     list_of_setted_param_x,
-            #     list_of_recalculated_param_y[1],
-            #     plot_config['SPE']['grid'],
-            #     label=plot_config['SPE']['trs']
-            # )
+            plt.plot(
+                list_of_setted_param_x,
+                list_of_recalculated_param_y[1],
+                plot_config['SPE']['grid'],
+                label=plot_config['SPE']['trs']
+            )
             plt.plot(
                 list_of_setted_param_x,
                 list_of_recalculated_param_y[2],
@@ -74,9 +74,9 @@ class TotalResult(CombinedCalc):
         plot_config['y']['label'] = u"Термічний ККД"
         plot_config['x']['label'] = u"Ступінь підвищення тиску в компресорі"
         plot_config['x']['data']['from'] = 10
-        plot_config['x']['data']['to'] = 15
+        plot_config['x']['data']['to'] = 20
         plot_config['x']['data']['count'] = 10
-        plot_config['x']['data']['name'] = u"Пк"
+        plot_config['x']['data']['name'] = u"PIk"
         plot_config['y']['data']['names'] = [
             "ETAtGTE", "ETAtSPE", "ETAtCC"]
         plot_config['file_name'] = MEDIA_ROOT + "ETAt-PIk.png"
@@ -206,8 +206,8 @@ class TotalResult(CombinedCalc):
 
     def plot_graphs(self):
         self.plot_ETAt_PIk()
-        # self.plot_ETAt_T1()
-        # self.plot_ETAt_T4()
+        self.plot_ETAt_T1()
+        self.plot_ETAt_T4()
         # self.plot_ETAt_p6()
         # self.plot_ETAt_T6()
         # self.plot_ETAt_Tcr()

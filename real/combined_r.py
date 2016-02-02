@@ -50,7 +50,7 @@ class CombinedCalcR(GTECalcR):
     def Db(self):
         """Витрата пару котра генеруеться КУ (кгвп/с).
         """
-        return self.Gr * self.hb_in / float(self.hb_out)
+        return self.Ggt * self.hb_in / float(self.hb_out)
 
     @property
     def pst_in(self):
@@ -128,5 +128,5 @@ class CombinedCalcR(GTECalcR):
 
 if __name__ == '__main__':
     real_calc = CombinedCalcR(**INIT_DATA)
-    print real_calc.NelCC
+    print real_calc.ETAelSPE
     print real_calc.ETAelCC

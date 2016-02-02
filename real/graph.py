@@ -68,18 +68,18 @@ def plot_graph(
 
     plt.plot(
         x_list, y_list["GTE"],
-        'g-',
+        'go-',
         label=u'ГТУ'
     )
     plt.plot(
         x_list, y_list["CC"],
-        'r-',
+        'rs-',
         label=u'ПГУ'
     )
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     # plt.title(title, ha='center', va='center')
-    plt.legend(loc=7)
+    plt.legend(loc=4)
     plt.grid(True)
     plt.savefig('pictures/' + f_name, dpi=150)
     plt.clf()
@@ -119,50 +119,50 @@ if __name__ == '__main__':
     #     f_name='Tb_out-ETAel.png',
     #     count=20
     # )
-    plot_graph(
-        x_name='T4gte',
-        y_name='ETAel',
-        x_label=u'Температура за ГТ, (К)',
-        y_label=u'Електричний ККД',
-        x_1=400 + KELVIN_CONST,
-        x_2=600 + KELVIN_CONST,
-        title=u'Залежність між температурою за ГТ та електричним ККД',
-        f_name='T4gte-ETAel.png',
-        count=10
-    )
-    plot_graph(
-        x_name='T4gte',
-        y_name='Nel',
-        x_label=u'Температура за ГТ, (К)',
-        y_label=u'Електрична потужність (Вт)',
-        x_1=400 + KELVIN_CONST,
-        x_2=600 + KELVIN_CONST,
-        title=u'Залежність між температурою за ГТ та електричною потужністю (Вт)',
-        f_name='T4gte-Nel.png',
-        count=10
-    )
+    # plot_graph(
+    #     x_name='T4gte',
+    #     y_name='ETAel',
+    #     x_label=u'Температура за ГТ, (К)',
+    #     y_label=u'Електричний ККД',
+    #     x_1=400 + KELVIN_CONST,
+    #     x_2=600 + KELVIN_CONST,
+    #     title=u'Залежність між температурою за ГТ та електричним ККД',
+    #     f_name='T4gte-ETAel.png',
+    #     count=10
+    # )
+    # plot_graph(
+    #     x_name='T4gte',
+    #     y_name='Nel',
+    #     x_label=u'Температура за ГТ, (К)',
+    #     y_label=u'Електрична потужність (Вт)',
+    #     x_1=400 + KELVIN_CONST,
+    #     x_2=600 + KELVIN_CONST,
+    #     title=u'Залежність між температурою за ГТ та електричною потужністю (Вт)',
+    #     f_name='T4gte-Nel.png',
+    #     count=10
+    # )
     plot_graph(
         x_name='PIk',
         y_name='ETAel',
         x_label=u'Ступінь підвищення тиску в компресорі',
         y_label=u'Електричний ККД',
         x_1=10,
-        x_2=15,
+        x_2=20,
         title=u'Залежність між степенем підвищення тиску та електричним ККД',
         f_name='PIk-ETAel.png',
         count=10
     )
-    plot_graph(
-        x_name='PIk',
-        y_name='Nel',
-        x_label=u'Ступінь підвищення тиску в компресорі',
-        y_label=u'Електрична потужність (Вт)',
-        x_1=10,
-        x_2=15,
-        title=u'Залежність між степенем підвищення тиску та електричною потужністю (Вт)',
-        f_name='PIk-Nel.png',
-        count=10
-    )
+    # plot_graph(
+    #     x_name='PIk',
+    #     y_name='Nel',
+    #     x_label=u'Ступінь підвищення тиску в компресорі',
+    #     y_label=u'Електрична потужність (Вт)',
+    #     x_1=10,
+    #     x_2=20,
+    #     title=u'Залежність між степенем підвищення тиску та електричною потужністю (Вт)',
+    #     f_name='PIk-Nel.png',
+    #     count=10
+    # )
     # plot_Nel_ETAel(
     #     'T3gte',
     #     u'Зміна теператури перед ГТ',
