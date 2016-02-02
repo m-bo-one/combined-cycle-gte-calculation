@@ -130,4 +130,4 @@ class CombinedCalcR(GTECalcR):
 if __name__ == '__main__':
     real_calc = CombinedCalcR(**INIT_DATA)
     print real_calc.ETAelSPE
-    print real_calc.ETAelCC
+    print real_calc.ETAelGTE

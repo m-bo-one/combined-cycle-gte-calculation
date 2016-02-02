@@ -42,7 +42,7 @@ class GTCalcR(object):
     def p4gte(self):
         """Тиск газів за ГТ (Па).
         """
-        return self.piair * (1 - self.sigmapp)
+        return self.piair * (1 - self.sigmacc)
 
     @lazyproperty
     def lgtgte(self):
