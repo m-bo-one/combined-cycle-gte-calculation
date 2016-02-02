@@ -14,31 +14,33 @@ class CombinedCalc(GTECalc):
     def _set_params_at_points(self):
         # -------------------------------------------------------------------
         # POINT ==> 6
-        # Entalpy as a function of pressure and temperature.
+        # Ентальпія як функції тиску і температури.
         self.h6 = steamTable.h_pt(self.p6, self.T6 - KELVIN_CONST)
-        # Specific entropy as a function of pressure and temperature
-        # (Returns saturated vapour entalpy if mixture.)
+        # Питома ентропія як функція тиску і температури
+        # (Повертає насичений пар ентальпії якщо це суміш.)
         self.s6 = steamTable.s_pt(self.p6, self.T6 - KELVIN_CONST)
         # -------------------------------------------------------------------
         # POINT ==> 7
         self.T7 = self.T1 + self.Tcr
-        # Saturation pressure
+        # Насичений тиск
         self.p7 = steamTable.psat_t(self.T7 - KELVIN_CONST)
         self.s7 = self.s6
-        # Vapour fraction as a function of pressure and entropy
+        # Пари фракції як функції тиску і ентропії
         self.x7 = steamTable.x_ps(self.p7, self.s7)
-        # Entalpy as a function of temperature and vapour fraction
+        # Ентальпія в залежності від температури і парової фракції
         self.h7 = steamTable.h_tx(self.T7 - KELVIN_CONST, self.x7)
         # -------------------------------------------------------------------
         # POINT ==> 8
         self.T8 = self.T7
-        # Saturated liquid enthalpy
+        # Ентальпія насиченої рідини.
         self.h8 = steamTable.hL_t(self.T8 - KELVIN_CONST)
+        # Ентропія насиченої рідини.
         self.s8 = steamTable.sL_t(self.T8 - KELVIN_CONST)
         # -------------------------------------------------------------------
         # POINT ==> 9
         self.p9 = self.p6
         self.s9 = self.s8
+        # Ентальпія як функції тиску і ентропії.
         self.h9 = steamTable.h_ps(self.p9, self.s9)
         # -------------------------------------------------------------------
         self._show_errors()
