@@ -3,6 +3,7 @@
 from wspru_api import WspRuAPI
 from init_data import INIT_DATA
 from gte_r import GTECalcR
+from helpers import lazyproperty
 
 
 wspru_api = WspRuAPI()
@@ -28,98 +29,98 @@ class CombinedCalcR(GTECalcR):
                     self.T4gte, self.Tb_out, _diff))
         return
 
-    @property
+    @lazyproperty
     def pd(self):
         """Тиск пару в барабані КУ (Па).
         """
         return self.p4gte + self.deltaps
 
-    @property
+    @lazyproperty
     def hb_in(self):
         """Ентальпія пару на вході в КУ (Дж/кгвп).
         """
         return wspru_api.wspg('HGST', self.gsg, self.T4gte)
 
-    @property
+    @lazyproperty
     def hb_out(self):
         """Ентальпія пару на виході з КУ в циклі (Дж/кгвп).
         """
         return wspru_api.wsp('HPT', self.pb_out, self.Tb_out)
 
-    @property
+    @lazyproperty
     def Db(self):
         """Витрата пару котра генеруеться КУ (кгвп/с).
         """
         return self.Ggt * self.hb_in / float(self.hb_out)
 
-    @property
+    @lazyproperty
     def pst_in(self):
         """Тиск пару на вході в ПТ (Па).
         """
         return self.pb_out * (1 - self.sigmapp)
 
-    @property
+    @lazyproperty
     def hst_in(self):
         """Ентальпія пару на вході в ПТ (Дж/кгвп).
         """
         return wspru_api.wsp('HPT', self.pst_in, self.Tb_out)
 
-    @property
+    @lazyproperty
     def h2spe(self):
         """Ентальпія пару після ПТ (Дж/кгвп).
         """
         return wspru_api.wsp('HPT', self.p2spe, self.T2spe)
 
-    @property
+    @lazyproperty
     def hout(self):
         """Ентальпія пару на виході з КУ (Дж/кгг).
         """
         return self.hb_in - self.ETAb * \
             (self.hb_in - wspru_api.wspg('HGST', self.gsg, self.Tiair))
 
-    @property
+    @lazyproperty
     def teta_out(self):
         """Температура вихлопних газів з КУ (К).
         """
         return wspru_api.wspg('TGSH', self.gsg, self.hout)
 
-    @property
+    @lazyproperty
     def Pst(self):
         """Внутрішня потужність ПТ (Вт).
         """
         return self.Db * (self.hst_in - self.h2spe)
 
-    @property
+    @lazyproperty
     def NelSPE(self):
         """Електрична потужність ПТУ (Вт).
         """
         return (self.Pst - 1 * 10**3) * self.ETAm_spe * self.ETAg_spe
 
-    @property
+    @lazyproperty
     def NelCC(self):
         """Електрична потужність ПГУ (Вт).
         """
         return self.NelGTE + self.NelSPE
 
-    @property
+    @lazyproperty
     def Q1b(self):
         """Кількість теплоти підведена до КУ (Вт).
         """
         return self.Q1_gte * (1 - self.ETAelGTE)
 
-    @property
+    @lazyproperty
     def Q1_spe(self):
         """Кількість теплоти підведена до ПТУ (Вт).
         """
         return self.Q1b * self.ETAb
 
-    @property
+    @lazyproperty
     def ETAelSPE(self):
         """Електрична потужність ПТУ.
         """
         return self.NelSPE / float(self.Q1_spe)
 
-    @property
+    @lazyproperty
     def ETAelCC(self):
         """Електрична потужність ПГУ.
         """
