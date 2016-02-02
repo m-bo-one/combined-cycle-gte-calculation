@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# FILE='cc_calc/real/spe_r.py'
 from wspru_api import WspRuAPI
 from init_data import INIT_DATA
 from gte_r import GTECalcR
