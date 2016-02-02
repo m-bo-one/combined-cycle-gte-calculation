@@ -3,7 +3,7 @@ from os import sys, path
 sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
 
-from spe_r import SPECalcR
+from combined_r import CombinedCalcR
 from init_data import *
 
 # third party
@@ -16,6 +16,7 @@ rcParams.update({'figure.autolayout': True})
 font = {'family': 'Droid Sans',
         'weight': 'normal'}
 rc('font', **font)
+__calc_class = CombinedCalcR
 
 
 def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
@@ -28,7 +29,7 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
     )
     for p in params:
         INIT_DATA[param_to_change] = p
-        real_calc = SPECalcR(**INIT_DATA)
+        real_calc = __calc_class(**INIT_DATA)
         _r_dict[p] = (
             (real_calc.NelCC / float(10**6), ),
             (real_calc.ETAelCC * 100, )
@@ -43,8 +44,8 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
             _r_dict[p][1][0], _r_dict[p][0][0],
             round(p, 3),
             size=10, ha='center', va='bottom')
-    plt.xlabel(u"ККДелПГУ (%)")
-    plt.ylabel(u"NелПГУ (МВт)")
+    plt.xlabel(u"Електричний ККД ПГУ (%)")
+    plt.ylabel(u"Електрична потужнысть ПГУ (МВт)")
     plt.title(title, ha='center', va='center')
     plt.grid(True)
     plt.savefig('pictures/' + f_name, dpi=450)
@@ -61,7 +62,7 @@ def plot_graph(
     }
     for x in xrange(count):
         INIT_DATA[x_name] = x_list[x]
-        real_calc = SPECalcR(**INIT_DATA)
+        real_calc = __calc_class(**INIT_DATA)
         y_list["GTE"].append(getattr(real_calc, y_name + "GTE"))
         y_list["CC"].append(getattr(real_calc, y_name + "CC"))
 

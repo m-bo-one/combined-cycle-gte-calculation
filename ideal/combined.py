@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# FILE='cc_calc/ideal/combined.py'
 from constants import *
 from gte_calc import GTECalc
 from init_data import INIT_DATA, steamTable

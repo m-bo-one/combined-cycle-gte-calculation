@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# FILE='cc_calc/real/spe_r.py'
+# FILE='cc_calc/real/combined_r.py'
 from wspru_api import WspRuAPI
 from init_data import INIT_DATA
 from gte_r import GTECalcR
@@ -8,7 +8,7 @@ from gte_r import GTECalcR
 wspru_api = WspRuAPI()
 
 
-class SPECalcR(GTECalcR):
+class CombinedCalcR(GTECalcR):
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -127,6 +127,6 @@ class SPECalcR(GTECalcR):
 
 
 if __name__ == '__main__':
-    real_calc = SPECalcR(**INIT_DATA)
+    real_calc = CombinedCalcR(**INIT_DATA)
     print real_calc.NelCC
     print real_calc.ETAelCC

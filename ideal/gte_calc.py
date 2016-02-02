@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# FILE='cc_calc/ideal/gte_calc.py'
 from constants import *
 from init_data import INIT_DATA
 

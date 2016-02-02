@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-KELVIN_CONST = 273.15
-P_100 = 100.
+# FILE='cc_calc/real/init_data.py'
+from os import sys, path
+sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+
+from ideal.constants import *
 
 
 INIT_DATA = {

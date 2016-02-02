@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# FILE='cc_calc/ideal/init_data.py'
 from constants import *
 
 # third party
