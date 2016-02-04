@@ -53,7 +53,7 @@ def plot_Nel_ETAel(param_to_change, title, from_p, to_p, count, f_name):
 
 
 def plot_graph(
-    x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count
+    x_name, y_name, x_label, y_label, x_1, x_2, title, f_name, count, l_pos=4
 ):
     x_list = linspace(x_1, x_2, count)
     y_list = {
@@ -86,7 +86,7 @@ def plot_graph(
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     # plt.title(title, ha='center', va='center')
-    plt.legend(loc=4)
+    plt.legend(loc=l_pos)
     plt.grid(True)
     plt.savefig('pictures/' + f_name, dpi=300)
     plt.clf()
@@ -135,7 +135,8 @@ if __name__ == '__main__':
         x_2=600 + KELVIN_CONST,
         title=u'Залежність між температурою за ГТ та електричним ККД',
         f_name='T4gte-ETAel.png',
-        count=10
+        count=10,
+        l_pos=7
     )
     plot_graph(
         x_name='T4gte',
